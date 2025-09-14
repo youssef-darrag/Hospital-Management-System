@@ -1,6 +1,8 @@
 using Hospital.Core.Helpers;
+using Hospital.Core.Repositories;
 using Hospital.EF;
 using Hospital.EF.Helpers;
+using Hospital.EF.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +17,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkSto
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -27,15 +31,22 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+    dbInitializer.Initialize();
+}
+
 app.UseRouting();
 
 app.UseAuthorization();
 
 app.MapStaticAssets();
-
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{Area=Patient}/{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 
