@@ -1,4 +1,5 @@
 ﻿using Hospital.Core.Helpers;
+using Hospital.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,7 +39,7 @@ namespace Hospital.EF.Helpers
                 _roleManager.CreateAsync(new IdentityRole(WebSiteRoles.Doctor)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(WebSiteRoles.Patient)).GetAwaiter().GetResult();
 
-                _userManager.CreateAsync(new IdentityUser
+                _userManager.CreateAsync(new ApplicationUser
                 {
                     UserName = "YoussefDarrag",
                     Email = "darrag@gmail.com"
