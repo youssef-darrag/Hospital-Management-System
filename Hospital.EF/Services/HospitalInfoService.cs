@@ -51,11 +51,11 @@ namespace Hospital.EF.Services
             var hospitalInfo = await _unitOfWork.HospitalInfos.GetByIdAsync(id);
 
             if (hospitalInfo is null)
-                return new GenericResponse<HospitalInfoViewModel> { Message = $"HospitalInfo with Id {id} not found." };
+                return new GenericResponse<HospitalInfoViewModel> { Message = $"Hospital Info with Id {id} not found." };
 
             return new GenericResponse<HospitalInfoViewModel>
             {
-                Success = true,
+                Succeeded = true,
                 Result = new()
                 {
                     Id = hospitalInfo.Id,
@@ -88,7 +88,7 @@ namespace Hospital.EF.Services
             var hospitalInfo = await _unitOfWork.HospitalInfos.GetByIdAsync(viewModel.Id);
 
             if (hospitalInfo is null)
-                return new GenericResponse<HospitalInfo> { Message = $"HospitalInfo with Id {viewModel.Id} not found." };
+                return new GenericResponse<HospitalInfo> { Message = $"Hospital Info with Id {viewModel.Id} not found." };
 
             hospitalInfo.Name = viewModel.Name;
             hospitalInfo.Type = viewModel.Type;
@@ -104,7 +104,7 @@ namespace Hospital.EF.Services
 
             return new GenericResponse<HospitalInfo>
             {
-                Success = true,
+                Succeeded = true,
                 Result = hospitalInfo
             };
         }

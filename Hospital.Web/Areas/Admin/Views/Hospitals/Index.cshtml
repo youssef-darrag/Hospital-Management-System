@@ -1,0 +1,84 @@
+﻿@model PagedResult<HospitalInfoViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-bordered border-primary">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                PinCode
+            </th>
+            <th>
+                Country
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Data) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PinCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country)
+            </td>
+            <td class="align-middle">
+                <div class="d-flex justify-content-end">
+                    <a class="btn btn-info rounded rounded-3 me-2" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a class="btn btn-info rounded rounded-3 me-2" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a class="btn btn-danger rounded rounded-3 js-delete" data-id="@item.Id">Delete</a>
+                </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<cs-pager cs-paging-pagesize=(int)Model.PageSize
+          cs-paging-pagenumber=(int)Model.PageNumber
+          cs-paging-totalitems=(int)Model.TotalRecords
+          cs-pagenumber-param="pageNumber"
+          asp-controller="Hospitals"
+          asp-action="Index"
+          cs-pager-li-current-class="page-item active"
+          cs-pager-li-other-class="page-item"
+          cs-pager-li-non-active-class="page-item disabled"
+          cs-pager-link-current-class="page-link"
+          cs-pager-link-other-class="page-link">
+</cs-pager>
+
+@section Scripts {
+    <script src="~/js/hospitals-index.js" asp-append-version="true"></script>
+}

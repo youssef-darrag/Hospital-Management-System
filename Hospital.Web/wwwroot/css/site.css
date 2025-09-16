@@ -29,3 +29,13 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* Start Override SweetAlert2 */
+.swal2-title, .swal2-html-container {
+    color: #fff !important;
+}
+
+div:where(.swal2-container) div:where(.swal2-popup) {
+    background: #1a0933;
+}
+/* End Override SweetAlert2 */

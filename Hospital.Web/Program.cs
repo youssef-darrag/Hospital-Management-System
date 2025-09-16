@@ -1,8 +1,10 @@
 using Hospital.Core.Helpers;
 using Hospital.Core.Repositories;
+using Hospital.Core.Services;
 using Hospital.EF;
 using Hospital.EF.Helpers;
 using Hospital.EF.Repositories;
+using Hospital.EF.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +22,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddTransient<IHospitalInfoService, HospitalInfoService>();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -48,7 +51,7 @@ app.MapStaticAssets();
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{Area=Patient}/{controller=Home}/{action=Index}/{id?}")
+    pattern: "{Area=Admin}/{controller=Hospitals}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 
