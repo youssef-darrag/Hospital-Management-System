@@ -8,12 +8,14 @@ namespace Hospital.EF.Repositories
         private readonly ApplicationDbContext _context;
 
         public IGenericRepository<ApplicationUser> ApplicationUsers { get; private set; }
+        public IGenericRepository<HospitalInfo> HospitalInfos { get; private set; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
 
             ApplicationUsers = new GenericRepository<ApplicationUser>(_context);
+            HospitalInfos = new GenericRepository<HospitalInfo>(_context);
         }
 
         public int Complete()
