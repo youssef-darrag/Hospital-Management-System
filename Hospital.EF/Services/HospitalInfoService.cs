@@ -3,6 +3,7 @@ using Hospital.Core.Models;
 using Hospital.Core.Repositories;
 using Hospital.Core.Services;
 using Hospital.Core.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Hospital.EF.Services
 {
@@ -125,6 +126,14 @@ namespace Hospital.EF.Services
                 isDeleted = true;
 
             return isDeleted;
+        }
+
+        public IEnumerable<SelectListItem> GetSelectList()
+        {
+            return _unitOfWork.HospitalInfos.GetAll()
+                .Select(h => new SelectListItem { Value = h.Id.ToString(), Text = h.Name })
+                .OrderBy(h => h.Text)
+                .ToList();
         }
     }
 }

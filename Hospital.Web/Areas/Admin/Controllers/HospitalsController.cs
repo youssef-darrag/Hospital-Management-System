@@ -22,12 +22,6 @@ namespace Hospital.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var genericResponse = await _hospitalInfoService.GetByIdAsync(id);
@@ -36,6 +30,12 @@ namespace Hospital.Web.Areas.Admin.Controllers
                 return NotFound(genericResponse.Message);
 
             return View(genericResponse.Result);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
         }
 
         [HttpPost]

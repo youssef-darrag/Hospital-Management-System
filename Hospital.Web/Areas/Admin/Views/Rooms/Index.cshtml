@@ -1,4 +1,4 @@
-﻿@model PagedResult<HospitalInfoViewModel>
+﻿@model PagedResult<Room>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,19 +13,16 @@
     <thead>
         <tr>
             <th>
-                Name
+                Room Number
             </th>
             <th>
                 Type
             </th>
             <th>
-                City
+                Status
             </th>
             <th>
-                PinCode
-            </th>
-            <th>
-                Country
+                Hospital
             </th>
             <th></th>
         </tr>
@@ -34,25 +31,22 @@
 @foreach (var item in Model.Data) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.RoomNumber)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Type)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.City)
+                @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PinCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country)
+                @Html.DisplayFor(modelItem => item.Hospital.Name)
             </td>
             <td class="align-middle">
                 <div class="d-flex justify-content-end">
                     <a class="btn btn-info rounded rounded-3 me-2" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                     <a class="btn btn-info rounded rounded-3 me-2" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    <a class="btn btn-danger rounded rounded-3 js-delete" data-id="@item.Id" data-controller="Hospitals">Delete</a>
+                    <a class="btn btn-danger rounded rounded-3 js-delete" data-id="@item.Id" data-controller="Rooms">Delete</a>
                 </div>
             </td>
         </tr>
@@ -64,7 +58,7 @@
           cs-paging-pagenumber=(int)Model.PageNumber
           cs-paging-totalitems=(int)Model.TotalRecords
           cs-pagenumber-param="pageNumber"
-          asp-controller="Hospitals"
+          asp-controller="Rooms"
           asp-action="Index"
           cs-pager-li-current-class="page-item active"
           cs-pager-li-other-class="page-item"

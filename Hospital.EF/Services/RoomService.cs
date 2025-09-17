@@ -15,54 +15,40 @@ namespace Hospital.EF.Services
             _unitOfWork = unitOfWork;
         }
 
-        public PagedResult<RoomViewModel> GetAll(int pageNumber, int pageSize)
+        public PagedResult<Room> GetAll(int pageNumber, int pageSize)
         {
             pageNumber = pageNumber <= 0 ? 1 : pageNumber;
             pageSize = pageSize <= 0 ? 10 : pageSize;
 
             int excludedRecords = (pageNumber * pageSize) - pageSize;
 
-            var rooms = _unitOfWork.Rooms.GetAll();
+            var rooms = _unitOfWork.Rooms.GetAll(includeProperties: "Hospital");
             var totalRecords = rooms.Count();
 
             var result = rooms.Skip(excludedRecords).Take(pageSize).ToList();
 
-            var viewModels = result.Select(r => new RoomViewModel
+            return new PagedResult<Room>
             {
-                Id = r.Id,
-                RoomNumber = r.RoomNumber,
-                Type = r.Type,
-                Status = r.Status,
-                HospitalId = r.HospitalId
-            }).ToList();
-
-            return new PagedResult<RoomViewModel>
-            {
-                Data = viewModels,
+                Data = result.ToList(),
                 TotalRecords = totalRecords,
                 PageNumber = pageNumber,
                 PageSize = pageSize
             };
         }
 
-        public async Task<GenericResponse<RoomViewModel>> GetByIdAsync(int id)
+        public async Task<GenericResponse<Room>> GetByIdAsync(int id)
         {
             var room = await _unitOfWork.Rooms.GetByIdAsync(id);
 
             if (room is null)
-                return new GenericResponse<RoomViewModel> { Message = $"Room with Id {id} not found." };
+                return new GenericResponse<Room> { Message = $"Room with Id {id} not found." };
 
-            return new GenericResponse<RoomViewModel>
+            room.Hospital = await _unitOfWork.HospitalInfos.GetByIdAsync(room.HospitalId);
+
+            return new GenericResponse<Room>
             {
                 Succeeded = true,
-                Result = new()
-                {
-                    Id = room.Id,
-                    RoomNumber = room.RoomNumber,
-                    Type = room.Type,
-                    Status = room.Status,
-                    HospitalId = room.HospitalId
-                }
+                Result = room
             };
         }
 
