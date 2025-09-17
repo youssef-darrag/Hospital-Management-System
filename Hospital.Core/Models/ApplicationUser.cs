@@ -11,6 +11,8 @@ namespace Hospital.Core.Models
         public string Address { get; set; } = default!;
         public DateTime DOB { get; set; }
         public string Specialist { get; set; } = default!;
+        public bool IsDoctor { get; set; }
+        public string PictureUrl { get; set; } = default!;
         public int? DepartmentId { get; set; }
         public Department Department { get; set; } = default!;
 
