@@ -15,14 +15,14 @@ namespace Hospital.EF.Repositories
             _dbSet = _context.Set<T>();
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null,
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? criteria = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             string includeProperties = "")
         {
             IQueryable<T> query = _dbSet;
 
-            if (filter != null)
-                query = query.Where(filter);
+            if (criteria != null)
+                query = query.Where(criteria);
 
             foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 query = query.Include(includeProperty);
@@ -38,9 +38,29 @@ namespace Hospital.EF.Repositories
             return _dbSet.Find(id);
         }
 
+        public T? GetById(Expression<Func<T, bool>> criteria, string includeProperties = "")
+        {
+            IQueryable<T> query = _dbSet;
+
+            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                query = query.Include(includeProperty);
+
+            return query.FirstOrDefault(criteria);
+        }
+
         public async Task<T?> GetByIdAsync(object id)
         {
             return await _dbSet.FindAsync(id);
+        }
+
+        public async Task<T?> GetByIdAsync(Expression<Func<T, bool>> criteria, string includeProperties = "")
+        {
+            IQueryable<T> query = _dbSet;
+
+            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                query = query.Include(includeProperty);
+
+            return await query.FirstOrDefaultAsync(criteria);
         }
 
         public void Add(T entity)

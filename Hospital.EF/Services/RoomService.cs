@@ -36,14 +36,17 @@ namespace Hospital.EF.Services
             };
         }
 
-        public async Task<GenericResponse<Room>> GetByIdAsync(int id)
+        public async Task<GenericResponse<Room>> GetByIdAsync(int id, string includeProperties = "")
         {
-            var room = await _unitOfWork.Rooms.GetByIdAsync(id);
+            var room = new Room();
+
+            if (string.IsNullOrEmpty(includeProperties))
+                room = await _unitOfWork.Rooms.GetByIdAsync(id);
+            else
+                room = await _unitOfWork.Rooms.GetByIdAsync(r => r.Id == id, includeProperties);
 
             if (room is null)
                 return new GenericResponse<Room> { Message = $"Room with Id {id} not found." };
-
-            room.Hospital = await _unitOfWork.HospitalInfos.GetByIdAsync(room.HospitalId);
 
             return new GenericResponse<Room>
             {

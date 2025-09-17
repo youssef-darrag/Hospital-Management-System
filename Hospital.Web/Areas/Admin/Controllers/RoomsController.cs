@@ -26,7 +26,7 @@ namespace Hospital.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var genericResponse = await _roomService.GetByIdAsync(id);
+            var genericResponse = await _roomService.GetByIdAsync(id, "Hospital");
 
             if (!genericResponse.Succeeded)
                 return NotFound(genericResponse.Message);
