@@ -10,6 +10,7 @@ namespace Hospital.EF.Repositories
         public IGenericRepository<ApplicationUser> ApplicationUsers { get; private set; }
         public IGenericRepository<HospitalInfo> HospitalInfos { get; private set; }
         public IGenericRepository<Room> Rooms { get; private set; }
+        public IGenericRepository<Contact> Contacts { get; private set; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -18,6 +19,7 @@ namespace Hospital.EF.Repositories
             ApplicationUsers = new GenericRepository<ApplicationUser>(_context);
             HospitalInfos = new GenericRepository<HospitalInfo>(_context);
             Rooms = new GenericRepository<Room>(_context);
+            Contacts = new GenericRepository<Contact>(_context);
         }
 
         public int Complete()
