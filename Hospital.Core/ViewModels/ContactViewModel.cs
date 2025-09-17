@@ -6,7 +6,11 @@ namespace Hospital.Core.ViewModels
     public class ContactViewModel
     {
         public int Id { get; set; }
+
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; } = default!;
+
+        [DataType(DataType.PhoneNumber)]
         public string Phone { get; set; } = default!;
 
         [Display(Name = "Hospital")]
