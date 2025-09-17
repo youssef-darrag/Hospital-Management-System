@@ -1,6 +1,6 @@
-using System.Diagnostics;
 using Hospital.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Hospital.Web.Controllers
 {
@@ -14,11 +14,6 @@ namespace Hospital.Web.Controllers
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }
