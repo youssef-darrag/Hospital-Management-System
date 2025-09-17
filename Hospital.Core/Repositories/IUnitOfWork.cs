@@ -6,6 +6,7 @@ namespace Hospital.Core.Repositories
     {
         IGenericRepository<ApplicationUser> ApplicationUsers { get; }
         IGenericRepository<HospitalInfo> HospitalInfos { get; }
+        IGenericRepository<Room> Rooms { get; }
 
         int Complete();
         Task<int> CompleteAsync();
