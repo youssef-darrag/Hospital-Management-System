@@ -9,10 +9,10 @@ namespace Hospital.Core.Helpers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly string _imagesPath;
 
-        public ImageOperation(IWebHostEnvironment webHostEnvironment)
+        public ImageOperation(IWebHostEnvironment webHostEnvironment, string path)
         {
             _webHostEnvironment = webHostEnvironment;
-            _imagesPath = $"{_webHostEnvironment.WebRootPath}{FileSettings.ImagesPath}";
+            _imagesPath = $"{_webHostEnvironment.WebRootPath}{FileSettings.ImagesPath}{path}";
         }
 
         public async Task<string> SaveImage(IFormFile file)

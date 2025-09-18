@@ -131,7 +131,7 @@ namespace Hospital.Web.Areas.Identity.Pages.Account
                 user.IsDoctor = Input.IsDoctor;
                 user.DepartmentId = Input.DepartmentId;
 
-                ImageOperation image = new ImageOperation(_webHostEnvironment);
+                ImageOperation image = new ImageOperation(_webHostEnvironment, ImagePaths.Doctor);
                 string fileName = await image.SaveImage(Input.PictureUrl);
                 user.PictureUrl = fileName;
 
@@ -140,6 +140,8 @@ namespace Hospital.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    await _userManager.AddToRoleAsync(user, WebSiteRoles.Doctor);
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
