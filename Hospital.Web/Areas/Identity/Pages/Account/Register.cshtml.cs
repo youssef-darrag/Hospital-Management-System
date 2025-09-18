@@ -93,7 +93,7 @@ namespace Hospital.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-            public string Name { get; set; }
+            public string UserName { get; set; }
             public Gender Gender { get; set; }
             public string Nationality { get; set; }
             public string Address { get; set; }
@@ -116,7 +116,7 @@ namespace Hospital.Web.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                user.Name = Input.Name;
+                user.UserName = Input.UserName;
                 user.Gender = Input.Gender;
                 user.Nationality = Input.Nationality;
                 user.Address = Input.Address;
