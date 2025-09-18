@@ -41,7 +41,7 @@ namespace Hospital.EF.Helpers
 
                 _userManager.CreateAsync(new ApplicationUser
                 {
-                    UserName = "YoussefDarrag",
+                    Name = "Youssef Darrag",
                     Email = "darrag@gmail.com"
 
                 }, "P@ssword123").GetAwaiter().GetResult();

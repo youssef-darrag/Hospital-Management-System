@@ -5,6 +5,7 @@ namespace Hospital.Core.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public string Name { get; set; } = default!;
         public Gender Gender { get; set; }
         public string Nationality { get; set; } = default!;
         public string Address { get; set; } = default!;
