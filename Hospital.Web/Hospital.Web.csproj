@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Hospital.EF\Hospital.EF.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\images\doctors\" />
+  </ItemGroup>
+
 </Project>
