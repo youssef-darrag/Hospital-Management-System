@@ -12,7 +12,7 @@ namespace Hospital.Core.Helpers
         public ImageOperation(IWebHostEnvironment webHostEnvironment, string path)
         {
             _webHostEnvironment = webHostEnvironment;
-            _imagesPath = $"{_webHostEnvironment.WebRootPath}{FileSettings.ImagesPath}{path}";
+            _imagesPath = $"{_webHostEnvironment.WebRootPath}{FileSettings.ImagesPath}/{path}";
         }
 
         public async Task<string> SaveImage(IFormFile file)
@@ -30,6 +30,12 @@ namespace Hospital.Core.Helpers
             }
 
             return fileName;
+        }
+
+        public void DeleteImage(string pictureUrl)
+        {
+            var path = Path.Combine(_imagesPath, pictureUrl);
+            File.Delete(path);
         }
     }
 }
