@@ -148,8 +148,8 @@ namespace Hospital.Web.Areas.Identity.Pages.Account
                 user.Specialist = Input.Specialist;
                 user.IsDoctor = Input.IsDoctor;
 
-                ImageOperation image = new ImageOperation(_webHostEnvironment, ImagePaths.Doctor);
-                string fileName = await image.SaveImage(Input.PictureUrl);
+                ImageOperation imageOperation = new ImageOperation(_webHostEnvironment, ImagePaths.Doctor);
+                string fileName = await imageOperation.SaveImage(Input.PictureUrl);
                 user.PictureUrl = fileName;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -182,6 +182,11 @@ namespace Hospital.Web.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
+                else
+                {
+                    imageOperation.DeleteImage(user.PictureUrl);
+                }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);

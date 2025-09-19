@@ -136,8 +136,8 @@ namespace Hospital.Web.Areas.Identity.Pages.Account
                 user.Address = Input.Address;
                 user.DOB = Input.DOB;
 
-                ImageOperation image = new ImageOperation(_webHostEnvironment, ImagePaths.Patient);
-                string fileName = await image.SaveImage(Input.PictureUrl);
+                ImageOperation imageOperation = new ImageOperation(_webHostEnvironment, ImagePaths.Patient);
+                string fileName = await imageOperation.SaveImage(Input.PictureUrl);
                 user.PictureUrl = fileName;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -172,6 +172,11 @@ namespace Hospital.Web.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
+                else
+                {
+                    imageOperation.DeleteImage(user.PictureUrl);
+                }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
