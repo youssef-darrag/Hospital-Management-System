@@ -93,15 +93,33 @@ namespace Hospital.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
             public string Name { get; set; }
+
+            [Required]
             public Gender Gender { get; set; }
+
+            [Required]
             public string Nationality { get; set; }
+
+            [Required]
             public string Address { get; set; }
+
+            [Required]
+            [Display(Name = "Date Of Birth")]
             public DateTime DOB { get; set; }
+
+            [Required]
             public string Specialist { get; set; }
+
+            [Required]
+            [Display(Name = "Is Doctor")]
             public bool IsDoctor { get; set; }
+
+            [Required]
+            [Display(Name = "Picture Url")]
             public IFormFile PictureUrl { get; set; }
-            public int? DepartmentId { get; set; }
         }
 
 
@@ -129,7 +147,6 @@ namespace Hospital.Web.Areas.Identity.Pages.Account
                 user.DOB = Input.DOB;
                 user.Specialist = Input.Specialist;
                 user.IsDoctor = Input.IsDoctor;
-                user.DepartmentId = Input.DepartmentId;
 
                 ImageOperation image = new ImageOperation(_webHostEnvironment, ImagePaths.Doctor);
                 string fileName = await image.SaveImage(Input.PictureUrl);

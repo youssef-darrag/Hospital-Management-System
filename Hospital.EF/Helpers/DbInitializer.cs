@@ -39,7 +39,7 @@ namespace Hospital.EF.Helpers
                 _roleManager.CreateAsync(new IdentityRole(WebSiteRoles.Doctor)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(WebSiteRoles.Patient)).GetAwaiter().GetResult();
 
-                var result = _userManager.CreateAsync(new ApplicationUser
+                _userManager.CreateAsync(new ApplicationUser
                 {
                     Name = "Youssef Darrag",
                     UserName = "YoussefDarrag",
