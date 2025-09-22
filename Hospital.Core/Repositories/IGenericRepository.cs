@@ -1,11 +1,12 @@
-﻿using System.Linq.Expressions;
+﻿using Hospital.Core.Consts;
+using System.Linq.Expressions;
 
 namespace Hospital.Core.Repositories
 {
     public interface IGenericRepository<T> : IDisposable
     {
         IEnumerable<T> GetAll(Expression<Func<T, bool>>? criteria = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            Expression<Func<T, object>>? orderBy = null, string orderByDirection = OrderBy.Ascending,
             string includeProperties = "");
         T? GetById(object id);
         T? GetById(Expression<Func<T, bool>> criteria, string includeProperties = "");

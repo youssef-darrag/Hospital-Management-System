@@ -23,7 +23,7 @@ namespace Hospital.EF.Services
 
             int excludedRecords = (pageNumber * pageSize) - pageSize;
 
-            var hospitalInfos = _unitOfWork.HospitalInfos.GetAll();
+            var hospitalInfos = _unitOfWork.HospitalInfos.GetAll(orderBy: h => h.Name);
             var totalRecords = hospitalInfos.Count();
 
             var result = hospitalInfos.Skip(excludedRecords).Take(pageSize).ToList();

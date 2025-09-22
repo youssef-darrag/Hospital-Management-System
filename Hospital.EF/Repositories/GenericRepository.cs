@@ -1,4 +1,5 @@
-﻿using Hospital.Core.Repositories;
+﻿using Hospital.Core.Consts;
+using Hospital.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -16,7 +17,7 @@ namespace Hospital.EF.Repositories
         }
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>>? criteria = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            Expression<Func<T, object>>? orderBy = null, string orderByDirection = OrderBy.Ascending,
             string includeProperties = "")
         {
             IQueryable<T> query = _dbSet;
@@ -28,9 +29,13 @@ namespace Hospital.EF.Repositories
                 query = query.Include(includeProperty);
 
             if (orderBy != null)
-                return orderBy(query).ToList();
-            else
-                return query.ToList();
+            {
+                query = orderByDirection == OrderBy.Ascending
+                    ? query.OrderBy(orderBy)
+                    : query.OrderByDescending(orderBy);
+            }
+
+            return query.ToList();
         }
 
         public T? GetById(object id)

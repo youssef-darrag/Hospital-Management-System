@@ -22,7 +22,7 @@ namespace Hospital.EF.Services
 
             int excludedRecords = (pageNumber * pageSize) - pageSize;
 
-            var rooms = _unitOfWork.Rooms.GetAll(includeProperties: "Hospital");
+            var rooms = _unitOfWork.Rooms.GetAll(includeProperties: "Hospital", orderBy: r => r.RoomNumber);
             var totalRecords = rooms.Count();
 
             var result = rooms.Skip(excludedRecords).Take(pageSize).ToList();
