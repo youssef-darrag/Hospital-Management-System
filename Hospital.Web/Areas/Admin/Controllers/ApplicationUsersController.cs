@@ -23,7 +23,7 @@ namespace Hospital.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(string id, string returnController = "ApplicationUsers")
         {
             var genericResponse = await _applicationUserService.GetByIdAsync(id);
 
@@ -39,11 +39,13 @@ namespace Hospital.Web.Areas.Admin.Controllers
                 genericResponse.Result.PictureUrl = image;
             }
 
+            ViewBag.ReturnController = returnController;
+
             return View(genericResponse.Result);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(string id, string returnController = "ApplicationUsers")
         {
             var genericResponse = await _applicationUserService.GetByIdAsync(id);
 
@@ -62,12 +64,14 @@ namespace Hospital.Web.Areas.Admin.Controllers
                 IsDoctor = genericResponse.Result.IsDoctor
             };
 
+            ViewBag.ReturnController = returnController;
+
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditApplicationUserViewModel viewModel)
+        public async Task<IActionResult> Edit(EditApplicationUserViewModel viewModel, string returnController)
         {
             if (!ModelState.IsValid)
                 return View(viewModel);
@@ -80,7 +84,7 @@ namespace Hospital.Web.Areas.Admin.Controllers
                 return View(viewModel);
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), returnController);
         }
 
         [HttpDelete]
