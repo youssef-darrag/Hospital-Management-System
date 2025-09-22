@@ -149,9 +149,17 @@ namespace Hospital.Web.Areas.Identity.Pages.Account
                 user.Specialist = Input.Specialist;
                 user.IsDoctor = Input.IsDoctor;
 
-                ImageOperation imageOperation = new ImageOperation(_webHostEnvironment, ImagePaths.Doctor);
-                string fileName = await imageOperation.SaveImage(Input.PictureUrl);
-                user.PictureUrl = fileName;
+                if (user.IsDoctor)
+                {
+                    ImageOperation imageOperation = new ImageOperation(_webHostEnvironment, ImagePaths.Doctor);
+                    string fileName = await imageOperation.SaveImage(Input.PictureUrl);
+                    user.PictureUrl = fileName;
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Is Doctor field is required.");
+                    return Page();
+                }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
@@ -185,6 +193,7 @@ namespace Hospital.Web.Areas.Identity.Pages.Account
                 }
                 else
                 {
+                    ImageOperation imageOperation = new ImageOperation(_webHostEnvironment, ImagePaths.Doctor);
                     imageOperation.DeleteImage(user.PictureUrl);
                 }
 
