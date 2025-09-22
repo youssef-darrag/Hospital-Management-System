@@ -3,6 +3,7 @@
 #nullable disable
 
 using Hospital.Core;
+using Hospital.Core.Consts;
 using Hospital.Core.Helpers;
 using Hospital.Core.Models;
 using Microsoft.AspNetCore.Authentication;

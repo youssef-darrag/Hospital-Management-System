@@ -1,4 +1,4 @@
-﻿using Hospital.Core.Helpers;
+﻿using Hospital.Core.Consts;
 using Hospital.Core.Services;
 using Hospital.Core.Settings;
 using Microsoft.AspNetCore.Mvc;

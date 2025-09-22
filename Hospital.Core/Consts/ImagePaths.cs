@@ -1,4 +1,4 @@
-﻿namespace Hospital.Core.Helpers
+﻿namespace Hospital.Core.Consts
 {
     public static class ImagePaths
     {

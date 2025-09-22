@@ -1,4 +1,5 @@
-﻿using Hospital.Core.Helpers;
+﻿using Hospital.Core.Consts;
+using Hospital.Core.Helpers;
 using Hospital.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
