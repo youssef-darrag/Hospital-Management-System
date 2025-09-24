@@ -6,7 +6,7 @@
 
 <h1>Index</h1>
 
-<table class="table">
+<table class="table table-bordered border-primary" style="text-align: center">
     <thead>
         <tr>
             <th>
@@ -21,7 +21,7 @@
             <th>
                 Specialist
             </th>
-            <th style="padding-left: 40px">
+            <th>
                 Timings
             </th>
             <th></th>
@@ -43,12 +43,12 @@
                 @Html.DisplayFor(modelItem => item.Specialist)
             </td>
             <td>
-                    <div class="d-flex justify-content-center">
+                <div>
                     <a class="btn btn-info rounded rounded-3 me-2" asp-controller="Timings" asp-action="Index" asp-route-id="@item.Id">Timings</a>
                 </div>
             </td>
-            <td class="align-middle">
-                <div class="d-flex justify-content-end">
+            <td>
+                <div>
                     <a class="btn btn-info rounded rounded-3 me-2" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                     <a class="btn btn-info rounded rounded-3 me-2" asp-action="Details" asp-route-id="@item.Id">Details</a>
                     <a class="btn btn-danger rounded rounded-3 js-delete" data-id="@item.Id" data-controller="ApplicationUsers">Delete</a>
