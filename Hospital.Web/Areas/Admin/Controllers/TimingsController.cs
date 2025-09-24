@@ -15,6 +15,27 @@ namespace Hospital.Web.Areas.Admin.Controllers
             _timingService = timingService;
         }
 
+        public IActionResult Index(string id)
+        {
+            var genericResponse = _timingService.GetAll(id);
+
+            if (!genericResponse.Succeeded)
+                return NotFound(genericResponse.Message);
+
+            return View(genericResponse.Result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var genericResponse = await _timingService.GetByIdAsync(id, "Doctor");
+
+            if (!genericResponse.Succeeded)
+                return NotFound(genericResponse.Message);
+
+            return View(genericResponse.Result);
+        }
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -52,6 +73,64 @@ namespace Hospital.Web.Areas.Admin.Controllers
             await _timingService.CreateAsync(viewModel);
 
             return RedirectToAction(nameof(Index), new { id = viewModel.DoctorId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var genericResponse = await _timingService.GetByIdAsync(id, "Doctor");
+
+            if (!genericResponse.Succeeded)
+                return NotFound(genericResponse.Message);
+
+            var viewModel = new UpdateTimingViewModel
+            {
+                Id = genericResponse.Result!.Id,
+                DoctorId = genericResponse.Result.DoctorId,
+                DoctorName = genericResponse.Result.Doctor.Name,
+                Date = genericResponse.Result.Date,
+                Status = genericResponse.Result.Status,
+                Duration = genericResponse.Result.Duration,
+                MorningShiftStartTime = genericResponse.Result.MorningShiftStartTime,
+                MorningShiftEndTime = genericResponse.Result.MorningShiftEndTime,
+                AfternoonShiftStartTime = genericResponse.Result.AfternoonShiftStartTime,
+                AfternoonShiftEndTime = genericResponse.Result.AfternoonShiftEndTime,
+                MorningShiftStartTimes = ShiftPeriods(1, 10),
+                MorningShiftEndTimes = ShiftPeriods(3, 13),
+                AfternoonShiftStartTimes = ShiftPeriods(13, 18),
+                AfternoonShiftEndTimes = ShiftPeriods(15, 21)
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(UpdateTimingViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
+            var genericResponse = await _timingService.UpdateAsync(viewModel);
+
+            if (!genericResponse.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, genericResponse.Message ?? "An error occurred while updating the timing.");
+                return View(viewModel);
+            }
+
+            return RedirectToAction(nameof(Index), new { id = viewModel.DoctorId });
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var isDeleted = await _timingService.DeleteAsync(id);
+
+            if (!isDeleted)
+                return BadRequest("An error occurred while deleting the timing.");
+
+            return Ok();
         }
 
         private IEnumerable<SelectListItem> ShiftPeriods(int from, int to)
