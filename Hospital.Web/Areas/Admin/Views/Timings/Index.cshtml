@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Timing>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                Morning Shift Start Time
+            </th>
+            <th>
+                Morning Shift End Time
+            </th>
+            <th>
+                Afternoon Shift Start Time
+            </th>
+            <th>
+                Afternoon Shift End Time
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MorningShiftStartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MorningShiftEndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AfternoonShiftStartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AfternoonShiftEndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td class="align-middle">
+                <div class="d-flex justify-content-end">
+                    <a class="btn btn-info rounded rounded-3 me-2" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a class="btn btn-info rounded rounded-3 me-2" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a class="btn btn-danger rounded rounded-3 js-delete" data-id="@item.Id" data-controller="Timings">Delete</a>
+                </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="~/js/generics-index.js" asp-append-version="true"></script>
+}
