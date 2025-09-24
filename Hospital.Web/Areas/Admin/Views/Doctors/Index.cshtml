@@ -21,6 +21,9 @@
             <th>
                 Specialist
             </th>
+            <th style="padding-left: 40px">
+                Timings
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -38,6 +41,11 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Specialist)
+            </td>
+            <td>
+                    <div class="d-flex justify-content-center">
+                    <a class="btn btn-info rounded rounded-3 me-2" asp-controller="Timings" asp-action="Index" asp-route-id="@item.Id">Timings</a>
+                </div>
             </td>
             <td class="align-middle">
                 <div class="d-flex justify-content-end">
