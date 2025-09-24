@@ -27,6 +27,7 @@ builder.Services.AddTransient<IRoomService, RoomService>();
 builder.Services.AddTransient<IContactService, ContactService>();
 builder.Services.AddTransient<IApplicationUserService, ApplicationUserService>();
 builder.Services.AddTransient<IDoctorService, DoctorService>();
+builder.Services.AddTransient<ITimingService, TimingService>();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
