@@ -3,6 +3,7 @@ using Hospital.Core.Helpers;
 using Hospital.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Hospital.EF.Helpers
 {
@@ -53,6 +54,15 @@ namespace Hospital.EF.Helpers
                 if (user != null)
                 {
                     _userManager.AddToRoleAsync(user, WebSiteRoles.Admin).GetAwaiter().GetResult();
+
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, user.Id),
+                        new Claim(ClaimTypes.GivenName, user.Name),
+                        new Claim(ClaimTypes.Role, WebSiteRoles.Admin)
+                    };
+
+                    _userManager.AddClaimsAsync(user, claims).GetAwaiter().GetResult();
                 }
             }
         }
