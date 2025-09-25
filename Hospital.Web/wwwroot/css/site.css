@@ -43,8 +43,14 @@ div:where(.swal2-container) div:where(.swal2-popup) {
 /* Start Custom Styles */
 .picture-preview {
     height: 300px;
-    width: 200px;
     object-fit: contain;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+}
+
+.list-picture-preview {
+    height: 300px;
+    object-fit: fill;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
 }

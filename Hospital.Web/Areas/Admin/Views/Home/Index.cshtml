@@ -1,0 +1,45 @@
+﻿@using Hospital.Core.Consts
+@using Hospital.Core.Settings
+@model IEnumerable<ApplicationUser>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning mt-5">
+        <h4 class="alert-heading">No doctors!</h4>
+        <p class="mb-0">No doctors were added yet.</p>
+    </div>
+}
+else
+{
+    <div class="row mt-5">
+        @foreach (var doctor in Model)
+        {
+            <div class="col-lg-4 mb-4">
+                <div class="card border-success">
+                    <div class="card-header">
+                        <img src="@($"{FileSettings.ImagesPath}/{ImagePaths.Doctor}/{doctor.PictureUrl}")" class="list-picture-preview w-100" />
+                    </div>
+                    <div class="card-body" style="text-align: center;">
+                        <div class="text-primary">
+                            <h4>@doctor.Name</h4>
+                        </div>
+                        <div class="text-success">
+                            <h4>@doctor.Specialist</h4>
+                        </div>
+                        <div class="text-nowrap">
+                            <h4>@doctor.Email</h4>
+                        </div>
+                        <div class="text-secondary">
+                            <h4>@doctor.Nationality</h4>
+                        </div>
+                        <a href="#" class="btn btn-primary fs-5 mt-2">Book Appointment</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

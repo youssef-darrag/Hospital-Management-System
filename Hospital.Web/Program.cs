@@ -56,7 +56,7 @@ app.MapStaticAssets();
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{Area=Admin}/{controller=Hospitals}/{action=Index}/{id?}")
+    pattern: "{Area=Admin}/{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 
