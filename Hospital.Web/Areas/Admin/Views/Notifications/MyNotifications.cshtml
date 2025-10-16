@@ -1,0 +1,452 @@
+﻿@model NotificationsViewModel
+@{
+    ViewData["Title"] = "My Notifications";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 mb-0">
+            <i class="bi bi-bell-fill text-primary me-2"></i>
+            My Notifications
+            @if (Model.HasUnread)
+            {
+                <span class="badge bg-danger ms-2" id="pageUnreadCount">@Model.UnreadCount</span>
+            }
+        </h2>
+
+        <div class="btn-group">
+            @if (Model.HasUnread)
+            {
+                <button id="markAllRead" class="btn btn-success btn-sm">
+                    <i class="bi bi-check-all me-1"></i> Mark All as Read
+                </button>
+            }
+            <button id="refreshBtn" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-arrow-clockwise"></i> Refresh
+            </button>
+        </div>
+    </div>
+
+    @if (!Model.HasNotifications)
+    {
+        <div class="alert alert-info text-center py-4">
+            <i class="bi bi-bell-slash display-4 d-block mb-3 text-muted"></i>
+            <h4 class="h5">No notifications yet</h4>
+            <p class="text-muted mb-0">You'll see important updates here when they arrive.</p>
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <strong class="text-dark">
+                            <span id="totalCount">@Model.TotalCount</span> notification(s)
+                            <span id="unreadCount" class="text-danger">(@Model.UnreadCount unread)</span>
+                        </strong>
+                    </div>
+                    <div class="col-auto">
+                        <div class="form-check form-switch mb-0">
+                            <input class="form-check-input" type="checkbox" id="autoRefresh" checked>
+                            <label class="form-check-label small" for="autoRefresh">Auto refresh</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="list-group list-group-flush" id="notificationsContainer">
+                @foreach (var notification in Model.Notifications)
+                {
+                    <div class="list-group-item border-0 py-3 @(notification.IsRead ? "" : "bg-light unread-notification")"
+                         data-notification-id="@notification.Id">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1 me-3">
+                                <p class="mb-2 @(notification.IsRead ? "text-muted" : "text-dark fw-medium")">
+                                    @notification.Message
+                                </p>
+                                <div class="small text-muted">
+                                    <i class="bi bi-clock me-1"></i>
+                                    @notification.CreatedAt.ToLocalTime().ToString("dd MMM yyyy 'at' hh:mm tt")
+
+                                    @if (notification.IsRead && notification.ReadAt.HasValue)
+                                    {
+                                        <span class="ms-3">
+                                            <i class="bi bi-eye me-1"></i>
+                                            Read: @notification.ReadAt.Value.ToLocalTime().ToString("dd MMM 'at' hh:mm tt")
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="btn-group flex-shrink-0">
+                                @if (!notification.IsRead)
+                                {
+                                    <button class="btn btn-sm btn-outline-success mark-as-read"
+                                            data-id="@notification.Id"
+                                            title="Mark as read">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                }
+                                <button class="btn btn-sm btn-outline-danger delete-notification"
+                                        data-id="@notification.Id"
+                                        title="Delete notification">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mark single notification as read
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.mark-as-read')) {
+                    const btn = e.target.closest('.mark-as-read');
+                    const notificationId = btn.dataset.id;
+                    markAsRead(notificationId, btn);
+                }
+            });
+
+            // Mark all as read
+            document.addEventListener('click', function(e) {
+                if (e.target.id === 'markAllRead' || e.target.closest('#markAllRead')) {
+                    markAllAsRead();
+                }
+            });
+
+            // Delete notification
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.delete-notification')) {
+                    const btn = e.target.closest('.delete-notification');
+                    const notificationId = btn.dataset.id;
+                    deleteNotification(notificationId, btn);
+                }
+            });
+
+            // Refresh button
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+                location.reload();
+            });
+
+            // Auto refresh
+            const autoRefreshCheckbox = document.getElementById('autoRefresh');
+            let refreshInterval;
+
+            function startAutoRefresh() {
+                refreshInterval = setInterval(() => {
+                    refreshNotifications();
+                }, 30000); // 30 seconds
+            }
+
+            function stopAutoRefresh() {
+                if (refreshInterval) {
+                    clearInterval(refreshInterval);
+                }
+            }
+
+            if (autoRefreshCheckbox) {
+                if (autoRefreshCheckbox.checked) {
+                    startAutoRefresh();
+                }
+
+                autoRefreshCheckbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        startAutoRefresh();
+                    } else {
+                        stopAutoRefresh();
+                    }
+                });
+            }
+
+            async function refreshNotifications() {
+                try {
+                    const response = await fetch('@Url.Action("GetUnreadCount", "Notifications", new { area = "Admin" })');
+                    if (response.ok) {
+                        const data = await response.json();
+                        const currentUnread = getCurrentUnreadCount();
+                        if (data.count !== currentUnread) {
+                            location.reload();
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error refreshing notifications:', error);
+                }
+            }
+
+            function getCurrentUnreadCount() {
+                return document.querySelectorAll('.unread-notification').length;
+            }
+
+            async function markAsRead(notificationId, buttonElement) {
+                try {
+                    console.log('🔔 MarkAsRead started for:', notificationId);
+
+                    const token = getAntiForgeryToken();
+                    if (!token) {
+                        showToast('Error', 'Security token not found', 'error');
+                        return;
+                    }
+
+                    const response = await fetch('@Url.Action("MarkAsRead", "Notifications", new { area = "Admin" })', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': token
+                        },
+                        body: JSON.stringify(parseInt(notificationId))
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('📨 MarkAsRead Result:', result);
+
+                    if (result.success) {
+                        // Update UI
+                        const notificationElement = buttonElement.closest('[data-notification-id]');
+                        if (notificationElement) {
+                            notificationElement.classList.remove('bg-light', 'unread-notification');
+                            notificationElement.querySelector('p').classList.remove('fw-medium');
+                            notificationElement.querySelector('p').classList.add('text-muted');
+                        }
+
+                        // Remove the mark as read button
+                        buttonElement.remove();
+
+                        // Update counters
+                        updatePageCounters(result.unreadCount);
+
+                        showToast('Success', result.message || 'Notification marked as read', 'success');
+                    } else {
+                        showToast('Error', result.message || 'Failed to mark as read', 'error');
+                    }
+                } catch (error) {
+                    console.error('❌ Error marking notification as read:', error);
+                    showToast('Error', 'An error occurred while marking as read', 'error');
+                }
+            }
+
+            async function markAllAsRead() {
+                try {
+                    console.log('🔔 MarkAllAsRead started');
+
+                    const token = getAntiForgeryToken();
+                    if (!token) {
+                        showToast('Error', 'Security token not found', 'error');
+                        return;
+                    }
+
+                    const response = await fetch('@Url.Action("MarkAllAsRead", "Notifications", new { area = "Admin" })', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': token
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('📨 MarkAllAsRead Result:', result);
+
+                    if (result.success) {
+                        // Update all notifications in UI
+                        document.querySelectorAll('.unread-notification').forEach(element => {
+                            element.classList.remove('bg-light', 'unread-notification');
+                            const textElement = element.querySelector('p');
+                            textElement.classList.remove('fw-medium');
+                            textElement.classList.add('text-muted');
+                        });
+
+                        // Remove all mark as read buttons
+                        document.querySelectorAll('.mark-as-read').forEach(btn => btn.remove());
+
+                        // Update counters
+                        updatePageCounters(result.unreadCount);
+
+                        // Hide mark all button
+                        const markAllBtn = document.getElementById('markAllRead');
+                        if (markAllBtn) {
+                            markAllBtn.style.display = 'none';
+                        }
+
+                        showToast('Success', result.message || 'All notifications marked as read', 'success');
+                    } else {
+                        showToast('Error', result.message || 'Failed to mark all as read', 'error');
+                    }
+                } catch (error) {
+                    console.error('❌ Error marking all notifications as read:', error);
+                    showToast('Error', 'An error occurred while marking all as read', 'error');
+                }
+            }
+
+            async function deleteNotification(notificationId, buttonElement) {
+                try {
+                    console.log('🔔 DeleteNotification started for:', notificationId);
+
+                    // Use SweetAlert2 for confirmation
+                    const result = await Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel',
+                        reverseButtons: true,
+                        focusCancel: true
+                    });
+
+                    if (!result.isConfirmed) {
+                        return;
+                    }
+
+                    const token = getAntiForgeryToken();
+                    if (!token) {
+                        showToast('Error', 'Security token not found', 'error');
+                        return;
+                    }
+
+                    const response = await fetch('@Url.Action("Delete", "Notifications", new { area = "Admin" })', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': token
+                        },
+                        body: JSON.stringify(parseInt(notificationId))
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const resultData = await response.json();
+                    console.log('📨 Delete Result:', resultData);
+
+                    if (resultData.success) {
+                        // Remove notification from UI with animation
+                        const notificationElement = buttonElement.closest('[data-notification-id]');
+                        if (notificationElement) {
+                            notificationElement.style.transition = 'all 0.3s ease';
+                            notificationElement.style.opacity = '0';
+                            notificationElement.style.height = '0';
+                            notificationElement.style.margin = '0';
+                            notificationElement.style.padding = '0';
+                            notificationElement.style.overflow = 'hidden';
+
+                            setTimeout(() => {
+                                notificationElement.remove();
+                                updatePageCountersAfterDelete(resultData.unreadCount);
+                            }, 300);
+                        }
+
+                        showToast('Success', resultData.message || 'Notification deleted', 'success');
+                    } else {
+                        showToast('Error', resultData.message || 'Failed to delete notification', 'error');
+                    }
+                } catch (error) {
+                    console.error('❌ Error deleting notification:', error);
+                    showToast('Error', 'An error occurred while deleting: ' + error.message, 'error');
+                }
+            }
+
+            function updatePageCounters(unreadCount) {
+                // Update page badge
+                const pageBadge = document.getElementById('pageUnreadCount');
+                if (pageBadge) {
+                    if (unreadCount > 0) {
+                        pageBadge.textContent = unreadCount;
+                    } else {
+                        pageBadge.remove();
+                    }
+                }
+
+                // Update header text
+                const unreadSpan = document.getElementById('unreadCount');
+                const totalSpan = document.getElementById('totalCount');
+                const totalElements = document.querySelectorAll('[data-notification-id]');
+
+                if (unreadSpan) {
+                    if (unreadCount > 0) {
+                        unreadSpan.textContent = '(' + unreadCount + ' unread)';
+                        unreadSpan.className = 'text-danger';
+                    } else {
+                        unreadSpan.textContent = '(all read)';
+                        unreadSpan.className = 'text-success';
+                    }
+                }
+
+                if (totalSpan) {
+                    totalSpan.textContent = totalElements.length;
+                }
+
+                // Update mark all button
+                updateMarkAllButton(unreadCount);
+            }
+
+            function updateMarkAllButton(unreadCount) {
+                const markAllBtn = document.getElementById('markAllRead');
+                if (markAllBtn) {
+                    if (unreadCount > 0) {
+                        markAllBtn.style.display = 'inline-block';
+                    } else {
+                        markAllBtn.style.display = 'none';
+                    }
+                }
+            }
+
+            function updatePageCountersAfterDelete(unreadCount) {
+                const totalElements = document.querySelectorAll('[data-notification-id]');
+                const totalSpan = document.getElementById('totalCount');
+
+                if (totalSpan) {
+                    totalSpan.textContent = totalElements.length;
+                }
+
+                updatePageCounters(unreadCount);
+
+                // If no notifications left, reload page
+                if (totalElements.length === 0) {
+                    setTimeout(() => location.reload(), 1000);
+                }
+            }
+
+            function showToast(title, message, type) {
+                if (typeof Swal === 'undefined') {
+                    alert(`${title}: ${message}`);
+                    return;
+                }
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+
+                Toast.fire({
+                    icon: type,
+                    title: title,
+                    text: message
+                });
+            }
+        });
+    </script>
+}
