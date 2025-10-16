@@ -27,5 +27,6 @@ namespace Hospital.EF
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<TestPrice> TestPrices { get; set; }
         public DbSet<Timing> Timings { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
     }
 }
