@@ -23,14 +23,19 @@
                 $.ajax({
                     url: `/Admin/${btn.data('controller')}/Delete/${btn.data('id')}`,
                     method: 'DELETE',
-                    success: function () {
-                        swal.fire({
-                            title: "Deleted!",
-                            text: "The record has been deleted.",
-                            icon: "success"
-                        });
+                    success: function (res) {
+                        if (res.redirectUrl) {
+                            window.location.href = res.redirectUrl;
+                        }
+                        else {
+                            swal.fire({
+                                title: "Deleted!",
+                                text: "The record has been deleted.",
+                                icon: "success"
+                            });
 
-                        btn.parents('tr').fadeOut();
+                            btn.parents('tr').fadeOut();
+                        }
                     },
                     error: function () {
                         swal.fire({
