@@ -49,6 +49,21 @@ namespace Hospital.EF.Services
             };
         }
 
+        public async Task<GenericResponse<Timing>> GetTimingByDoctorIdAsync(string doctorId, string includeProperties = "")
+        {
+            var timing = await _unitOfWork.Timings.GetByIdAsync(t => t.DoctorId == doctorId &&
+            t.Date > DateOnly.FromDateTime(DateTime.Now), includeProperties);
+
+            if (timing is null)
+                return new GenericResponse<Timing> { Message = $"No timings available for tomorrow." };
+
+            return new GenericResponse<Timing>
+            {
+                Succeeded = true,
+                Result = timing
+            };
+        }
+
         public async Task CreateAsync(CreateTimingViewModel viewModel)
         {
             var timing = new Timing
