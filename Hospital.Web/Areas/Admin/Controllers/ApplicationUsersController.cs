@@ -1,7 +1,9 @@
 ﻿using Hospital.Core.Consts;
 using Hospital.Core.Services;
 using Hospital.Core.Settings;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Hospital.Web.Areas.Admin.Controllers
 {
@@ -9,10 +11,12 @@ namespace Hospital.Web.Areas.Admin.Controllers
     public class ApplicationUsersController : Controller
     {
         private readonly IApplicationUserService _applicationUserService;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public ApplicationUsersController(IApplicationUserService applicationUserService)
+        public ApplicationUsersController(IApplicationUserService applicationUserService, SignInManager<IdentityUser> signInManager)
         {
             _applicationUserService = applicationUserService;
+            _signInManager = signInManager;
         }
 
         public IActionResult Index(int pageNumber = 1, int pageSize = 10)
@@ -94,6 +98,17 @@ namespace Hospital.Web.Areas.Admin.Controllers
 
             if (!isDeleted)
                 return BadRequest("An error occurred while deleting the user.");
+
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (currentUserId == id)
+            {
+                await _signInManager.SignOutAsync();
+                return Json(new
+                {
+                    redirectUrl = Url.Action("Index", "Home", new { area = "" })
+                });
+            }
 
             return Ok();
         }
