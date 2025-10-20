@@ -28,7 +28,9 @@ namespace Hospital.EF.Services
 
             int excludedRecords = (pageNumber * pageSize) - pageSize;
 
-            var users = _unitOfWork.ApplicationUsers.GetAll(orderBy: u => u.Name);
+            var Admins = _userManager.GetUsersInRoleAsync(WebSiteRoles.Admin).GetAwaiter().GetResult().Cast<ApplicationUser>();
+
+            var users = _unitOfWork.ApplicationUsers.GetAll(orderBy: u => u.Name).Except(Admins);
             var totalRecords = users.Count();
 
             var result = users.Skip(excludedRecords).Take(pageSize).ToList();
