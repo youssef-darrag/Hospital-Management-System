@@ -18,6 +18,7 @@ namespace Hospital.EF.Repositories
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>>? criteria = null,
             Expression<Func<T, object>>? orderBy = null, string orderByDirection = OrderBy.Ascending,
+            Expression<Func<T, object>>? thenBy = null, string thenByDirection = OrderBy.Ascending,
             string includeProperties = "")
         {
             IQueryable<T> query = _dbSet;
@@ -33,6 +34,14 @@ namespace Hospital.EF.Repositories
                 query = orderByDirection == OrderBy.Ascending
                     ? query.OrderBy(orderBy)
                     : query.OrderByDescending(orderBy);
+
+                // Then ordering (if exists)
+                if (thenBy != null)
+                {
+                    query = thenByDirection == OrderBy.Ascending
+                        ? ((IOrderedQueryable<T>)query).ThenBy(thenBy)
+                        : ((IOrderedQueryable<T>)query).ThenByDescending(thenBy);
+                }
             }
 
             return query.ToList();
@@ -86,6 +95,13 @@ namespace Hospital.EF.Repositories
             return entity;
         }
 
+        public IEnumerable<T> UpdateRange(IEnumerable<T> entities)
+        {
+            _dbSet.AttachRange(entities);
+            _context.Entry(entities).State = EntityState.Modified;
+            return entities;
+        }
+
         public T Delete(T entity)
         {
             if (_context.Entry(entity).State == EntityState.Detached)
@@ -95,6 +111,17 @@ namespace Hospital.EF.Repositories
 
             _dbSet.Remove(entity);
             return entity;
+        }
+
+        public IEnumerable<T> DeleteRange(IEnumerable<T> entities)
+        {
+            if (_context.Entry(entities).State == EntityState.Detached)
+            {
+                _dbSet.AttachRange(entities);
+            }
+
+            _dbSet.RemoveRange(entities);
+            return entities;
         }
 
         private bool disposed = false;

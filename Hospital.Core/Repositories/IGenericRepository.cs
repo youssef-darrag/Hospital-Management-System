@@ -7,6 +7,7 @@ namespace Hospital.Core.Repositories
     {
         IEnumerable<T> GetAll(Expression<Func<T, bool>>? criteria = null,
             Expression<Func<T, object>>? orderBy = null, string orderByDirection = OrderBy.Ascending,
+            Expression<Func<T, object>>? thenBy = null, string thenByDirection = OrderBy.Ascending,
             string includeProperties = "");
         T? GetById(object id);
         T? GetById(Expression<Func<T, bool>> criteria, string includeProperties = "");
@@ -15,6 +16,8 @@ namespace Hospital.Core.Repositories
         void Add(T entity);
         Task<T> AddAsync(T entity);
         T Update(T entity);
+        IEnumerable<T> UpdateRange(IEnumerable<T> entities);
         T Delete(T entity);
+        IEnumerable<T> DeleteRange(IEnumerable<T> entities);
     }
 }
