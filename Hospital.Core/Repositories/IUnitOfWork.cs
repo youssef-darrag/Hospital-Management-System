@@ -9,6 +9,8 @@ namespace Hospital.Core.Repositories
         IGenericRepository<Room> Rooms { get; }
         IGenericRepository<Contact> Contacts { get; }
         IGenericRepository<Timing> Timings { get; }
+        IGenericRepository<Appointment> Appointments { get; }
+        IGenericRepository<Notification> Notifications { get; }
 
         int Complete();
         Task<int> CompleteAsync();

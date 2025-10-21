@@ -12,6 +12,8 @@ namespace Hospital.EF.Repositories
         public IGenericRepository<Room> Rooms { get; private set; }
         public IGenericRepository<Contact> Contacts { get; private set; }
         public IGenericRepository<Timing> Timings { get; private set; }
+        public IGenericRepository<Appointment> Appointments { get; private set; }
+        public IGenericRepository<Notification> Notifications { get; private set; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -22,6 +24,8 @@ namespace Hospital.EF.Repositories
             Rooms = new GenericRepository<Room>(_context);
             Contacts = new GenericRepository<Contact>(_context);
             Timings = new GenericRepository<Timing>(_context);
+            Appointments = new GenericRepository<Appointment>(_context);
+            Notifications = new GenericRepository<Notification>(_context);
         }
 
         public int Complete()
