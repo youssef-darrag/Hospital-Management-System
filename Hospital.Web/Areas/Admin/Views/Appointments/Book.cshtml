@@ -1,0 +1,69 @@
+﻿@model BookAppointmentViewModel
+
+@{
+    ViewData["Title"] = "Book";
+}
+
+<h2>Book Appointment</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Book">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="DoctorId" type="hidden" />
+                <input asp-for="PatientId" type="hidden" />
+                <input asp-for="TimingId" type="hidden" />
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Doctor" class="form-label"></label>
+                <input asp-for="Doctor" class="form-control" disabled />
+                <input asp-for="Doctor" type="hidden" />
+                <span asp-validation-for="Doctor" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Status" class="form-label"></label>
+                <input asp-for="Status" class="form-control" readonly />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="AppointmentDate" class="form-label"></label>
+                <input asp-for="AppointmentDate" class="form-control" disabled />
+                <input asp-for="AppointmentDate" type="hidden" />
+                <span asp-validation-for="AppointmentDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="StartTime" class="form-label"></label>
+                <select class="form-select" asp-for="StartTime" asp-items="Model.StartTimes" data-placeholder="Select start time" data-minimum-results-for-serach="Infinity">
+                    <option value=""></option>
+                </select>
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Duration" type="hidden" value="@Model.Duration" />
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="EndTime" class="form-label"></label>
+                <input type="text" asp-for="EndTime" class="form-control" readonly />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Confirm" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Home" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/appointment-form.js" asp-append-version="true"></script>
+}
