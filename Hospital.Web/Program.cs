@@ -1,12 +1,15 @@
-using Hospital.Core.Helpers;
+﻿using Hospital.Core.Helpers;
+using Hospital.Core.Hubs;
 using Hospital.Core.Repositories;
 using Hospital.Core.Services;
 using Hospital.EF;
 using Hospital.EF.Helpers;
 using Hospital.EF.Repositories;
 using Hospital.EF.Services;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +22,20 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkSto
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+
+// إضافة الخدمات
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = builder.Environment.IsDevelopment();
+    options.MaximumReceiveMessageSize = 102400; // 100KB
+    options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+    options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+});
+builder.Services.AddMemoryCache();
+
+builder.Services.AddSingleton<IUserIdProvider, NameIdentifierUserIdProvider>();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
@@ -28,6 +45,8 @@ builder.Services.AddTransient<IContactService, ContactService>();
 builder.Services.AddTransient<IApplicationUserService, ApplicationUserService>();
 builder.Services.AddTransient<IDoctorService, DoctorService>();
 builder.Services.AddTransient<ITimingService, TimingService>();
+builder.Services.AddTransient<IAppointmentService, AppointmentService>();
+builder.Services.AddTransient<INotificationService, NotificationService>();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -41,6 +60,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -50,10 +70,17 @@ using (var scope = app.Services.CreateScope())
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHub<NotificationHub>("/notificationHub", options =>
+{
+    options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling;
+});
 
 app.MapStaticAssets();
 app.MapRazorPages();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{Area=Admin}/{controller=Home}/{action=Index}/{id?}")
