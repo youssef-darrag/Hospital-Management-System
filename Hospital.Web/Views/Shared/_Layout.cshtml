@@ -5,12 +5,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Hospital.Web</title>
+    <title>Hospital | @ViewData["Title"]</title>
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/notifications.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Hospital.Web.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
 </head>
 <body>
     <header>
@@ -44,14 +46,26 @@
                         @if (User.IsInRole(WebSiteRoles.Doctor))
                         {
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Appointments" asp-action="DoctorAppointments" asp-route-doctorId="@(User.FindFirstValue(ClaimTypes.NameIdentifier))">My Appointments</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="Admin" asp-controller="Timings" asp-action="Create">Add Timings</a>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/DoctorRegister">Doctor</a>
-                        </li>
-                        <li class="nav-item">
-                            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Patient</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-bell"></i> Notifications
+                                <span id="notifCount" class="badge bg-danger notification-badge" style="display: none;">0</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end notification-dropdown" id="notifList" aria-labelledby="notificationsDropdown">
+                                <li id="noNotif"><span class="dropdown-item text-muted">No notifications yet</span></li>
+                                <li><hr class="dropdown-divider m-0"></li>
+                                <li>
+                                    <a class="dropdown-item text-center text-primary fw-bold" asp-area="Admin" asp-controller="Notifications" asp-action="MyNotifications">
+                                        View all notifications
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -67,12 +81,17 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - Hospital.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - Hospital
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <!-- Add AntiForgeryToken script -->
+    <script src="~/js/get-anti-forgery-token.js" asp-append-version="true"></script>
+    <script src="~/js/signalr/signalr-connection.js" asp-append-version="true"></script>
+    <script src="~/js/notifications/notification-hub.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
