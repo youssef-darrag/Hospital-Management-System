@@ -1,0 +1,12 @@
+﻿@model Appointment
+
+<div class="alert alert-success text-center">
+    <h4 class="alert-heading">Booking Pending ⏳</h4>
+    <hr>
+    <p><strong>Doctor:</strong> @Model.Doctor.Name (@Model.Doctor.Specialist)</p>
+    <p><strong>Patient:</strong> @Model.Patient.Name</p>
+    <p><strong>Date:</strong> @Model.AppointmentDate</p>
+    <p><strong>Time:</strong> @Model.StartTime - @Model.EndTime</p>
+    <p><strong>Status:</strong> @Model.Status</p>
+    <p><strong>Description:</strong> @Model.Description</p>
+</div>
