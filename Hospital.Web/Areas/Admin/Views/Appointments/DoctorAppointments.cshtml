@@ -1,0 +1,55 @@
+﻿@using Hospital.Core
+@model IEnumerable<Appointment>
+
+@{
+    ViewData["Title"] = "DoctorAppointments";
+}
+
+<h2>My Appointments</h2>
+
+<table class="table table-bordered text-center">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var appt in Model)
+    {
+        <tr>
+            <td>@appt.Patient.Name</td>
+            <td>@appt.AppointmentDate</td>
+            <td>@appt.StartTime - @appt.EndTime</td>
+            <td>@appt.Status</td>
+            <td>
+                @if (appt.Status == Status.Pending)
+                {
+                    <form method="post" asp-action="UpdateStatus" style="display: inline;">
+                        <input type="hidden" name="id" value="@appt.Id" />
+                        <input type="hidden" name="status" value="@Status.Confirmed" />
+                        <button type="submit" class="btn btn-success btn-sm">Confirm</button>
+                    </form>
+
+                    <form method="post" asp-action="UpdateStatus" style="display: inline;">
+                        <input type="hidden" name="id" value="@appt.Id" />
+                        <input type="hidden" name="status" value="@Status.Cancelled" />
+                        <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                    </form>
+                }
+                else if (appt.Status == Status.Confirmed)
+                {
+                    <span class="badge bg-success">Confirmed</span>
+                }
+                else if (appt.Status == Status.Cancelled)
+                {
+                    <span class="badge bg-danger">Cancelled</span>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
