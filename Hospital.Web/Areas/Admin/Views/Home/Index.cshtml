@@ -36,7 +36,10 @@ else
                         <div class="text-secondary">
                             <h4>@doctor.Nationality</h4>
                         </div>
-                        <a asp-controller="Appointments" asp-action="Book" asp-route-doctorId="@doctor.Id" class="btn btn-primary fs-5 mt-2">Book Appointment</a>
+                        @if (User.IsInRole(WebSiteRoles.Patient) || User.IsInRole(WebSiteRoles.Doctor) || User.IsInRole(WebSiteRoles.Admin))
+                        {
+                            <a asp-controller="Appointments" asp-action="Book" asp-route-doctorId="@doctor.Id" class="btn btn-primary fs-5 mt-2">Book Appointment</a>
+                        }
                     </div>
                 </div>
             </div>

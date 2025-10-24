@@ -1,8 +1,10 @@
 ﻿using Hospital.Core;
+using Hospital.Core.Consts;
 using Hospital.Core.Hubs;
 using Hospital.Core.Models;
 using Hospital.Core.Services;
 using Hospital.Core.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
@@ -80,6 +82,7 @@ namespace Hospital.Web.Areas.Admin.Controllers
             return RedirectToAction(nameof(DoctorAppointments), new { doctorId = genericResponseAppointment.Result!.DoctorId });
         }
 
+        [Authorize(Roles = $"{WebSiteRoles.Patient},{WebSiteRoles.Doctor},{WebSiteRoles.Admin}")]
         [HttpGet]
         public async Task<IActionResult> Book(string doctorId)
         {
