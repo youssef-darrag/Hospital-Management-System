@@ -1,148 +1,85 @@
-🏥 Hospital Management System
+# 🏥 Hospital Management System
 
-
-
-
-
-
-A comprehensive web-based Hospital Management System built with ASP.NET Core MVC that streamlines hospital operations, patient management, and medical workflows.
+A *comprehensive web-based Hospital Management System* built with *ASP.NET Core MVC* that streamlines hospital operations, patient management, and medical workflows.  
 This system provides an efficient platform for managing patients, doctors, appointments, and medical records in a healthcare environment.
 
+---
+
+## 📚 Table of Contents
+- [🚀 Features](#-features)
+- [💻 Technologies Used](#-technologies-used)
+- [📁 Project Structure](#-project-structure)
+- [🔧 Installation & Setup](#-installation--setup)
+- [🎯 Key Implementation Details](#-key-implementation-details)
+- [🌟 Professional Skills Demonstrated](#-professional-skills-demonstrated)
+- [📊 Future Enhancements](#-future-enhancements)
+- [📄 License](#-license)
+- [🤝 Contributing](#-contributing)
 
 ---
 
-📚 Table of Contents
+## 🚀 Features
 
-🚀 Features
+### 🔐 Authentication & Authorization
+- Role-based access control with *ASP.NET Core Identity*
+- Secure user registration and login
+- Custom authorization policies for different user types
 
-💻 Technologies Used
+### 🏥 Core Functionalities
+- *Patient Management:* Full patient profiles, medical history, and records  
+- *Doctor Management:* Schedules, specialties, and availability  
+- *Appointment System:* Book, reschedule, and manage appointments  
+- *Medical Records:* Securely store and manage patient data  
+- *Department Management:* Organize hospital departments and services  
 
-📁 Project Structure
-
-🔧 Installation & Setup
-
-🎯 Key Implementation Details
-
-🌟 Professional Skills Demonstrated
-
-📊 Future Enhancements
-
-📄 License
-
-🤝 Contributing
-
-
-
----
-
-🚀 Features
-
-🔐 Authentication & Authorization
-
-Role-based access control with ASP.NET Core Identity
-
-Secure user registration and login
-
-Custom authorization policies for different user types
-
-
-🏥 Core Functionalities
-
-Patient Management: Full patient profiles, medical history, and records
-
-Doctor Management: Schedules, specialties, and availability
-
-Appointment System: Book, reschedule, and manage appointments
-
-Medical Records: Securely store and manage patient data
-
-Department Management: Organize hospital departments and services
-
-
-💻 Technical Features
-
-Responsive UI with Bootstrap 5
-
-Data access via Entity Framework Core
-
-Repository Pattern and Dependency Injection for clean architecture
-
-MVC Architecture ensuring separation of concerns
-
-Integrated SQL Server Database
-
-Dynamic rendering with Razor Pages
-
-
+### 💻 Technical Features
+- Responsive UI with *Bootstrap 5*  
+- Data access via *Entity Framework Core*  
+- *Repository Pattern* and *Dependency Injection* for clean architecture  
+- *MVC Architecture* ensuring separation of concerns  
+- Integrated *SQL Server Database*  
+- Dynamic rendering with *Razor Pages*
 
 ---
 
-💻 Technologies Used
+## 💻 Technologies Used
 
-🧠 Backend
+### 🧠 Backend
+- *ASP.NET Core 9.0* – Web framework  
+- *Entity Framework Core* – ORM  
+- *ASP.NET Core Identity* – Authentication  
+- *Dependency Injection* – Loosely coupled architecture  
+- *Repository Pattern* – Data abstraction layer  
 
-ASP.NET Core 9.0 – Web framework
+### 🎨 Frontend
+- *Bootstrap 5* – Responsive design  
+- *Razor Syntax* – Server-side rendering  
+- *HTML5 / CSS3 / JavaScript* – Client-side UI  
 
-Entity Framework Core – ORM
-
-ASP.NET Core Identity – Authentication
-
-Dependency Injection – Loosely coupled architecture
-
-Repository Pattern – Data abstraction layer
-
-
-🎨 Frontend
-
-Bootstrap 5 – Responsive design
-
-Razor Syntax – Server-side rendering
-
-HTML5 / CSS3 / JavaScript – Client-side UI
-
-
-🗄 Database
-
-SQL Server – Primary database
-
-EF Core Migrations – Database versioning and schema management
-
-
+### 🗄 Database
+- *SQL Server* – Primary database  
+- *EF Core Migrations* – Database versioning and schema management  
 
 ---
 
-📁 Project Structure
+## 📁 Project Structure
 
-Hospital-Management-System/
-├── Controllers/          # MVC Controllers
-├── Models/               # Domain models and ViewModels
-├── Views/                # Razor Views
-├── Services/             # Business logic layer
-├── Data/                 # Data access layer
-├── Repository/           # Repository implementations
-├── wwwroot/              # Static files (CSS, JS, Images)
-└── Configuration/        # App settings and configurations
-
+Hospital-Management-System/ ├── Controllers/          # MVC Controllers ├── Models/               # Domain models and ViewModels ├── Views/                # Razor Views ├── Services/             # Business logic layer ├── Data/                 # Data access layer ├── Repository/           # Repository implementations ├── wwwroot/              # Static files (CSS, JS, Images) └── Configuration/        # App settings and configurations
 
 ---
 
-🔧 Installation & Setup
+## 🔧 Installation & Setup
 
-🧩 Prerequisites
+### 🧩 Prerequisites
+- [.NET 9.0 SDK](https://dotnet.microsoft.com/download)
+- [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
+- [Visual Studio 2022](https://visualstudio.microsoft.com/) or [VS Code](https://code.visualstudio.com/)
 
-.NET 9.0 SDK
+### ⚙ Steps
 
-SQL Server
-
-Visual Studio 2022 or VS Code
-
-
-⚙ Steps
-
-1. Clone the repository
-
-git clone https://github.com/youssef-darrag/Hospital-Management-System.git
-
+1. *Clone the repository*
+   ```bash
+   git clone https://github.com/youssef-darrag/Hospital-Management-System.git
 
 2. Configure the database connection
 Update the connection string in appsettings.json.
