@@ -63,6 +63,7 @@ This system provides an efficient platform for managing patients, doctors, appoi
 ---
 
 ## 📁 Project Structure
+text
 
 Hospital-Management-System/
 ├── Controllers/          # MVC Controllers
@@ -92,16 +93,13 @@ Hospital-Management-System/
 2. Configure the database connection
 Update the connection string in appsettings.json.
 
-
 3. Apply migrations
    ```bash
    dotnet ef database update
 
-
 4. Run the application
    ```bash
    dotnet run
-
 
 ---
 
