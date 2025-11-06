@@ -63,18 +63,143 @@ This system provides an efficient platform for managing patients, doctors, appoi
 ---
 
 ## 📁 Project Structure
-text
-
-Hospital-Management-System/
-├── Controllers/          # MVC Controllers
-├── Models/               # Domain models and ViewModels
-├── Views/                # Razor Views
-├── Services/             # Business logic layer
-├── Data/                 # Data access layer
-├── Repository/           # Repository implementations
-├── wwwroot/              # Static files (CSS, JS, Images)
-└── Configuration/        # App settings and configurations
-
+   ```text
+   Hospital-Management-System/
+   │
+   ├── 📁 Hospital.Core/                                # Core Domain Layer
+   │   │
+   │   ├── 📁 Consts/                                   # Constant Files
+   │   │   ├── ImagePaths.cs
+   │   │   ├── OrderBy.cs
+   │   │   └── WebSiteRoles.cs
+   │   │
+   │   ├── 📁 Helpers/                                  # Helper Classes
+   │   │   ├── EmailSender.cs
+   │   │   ├── GenericResponse.cs
+   │   │   ├── IDbInitializer.cs
+   │   │   ├── ImageOperation.cs
+   │   │   └── PagedResult.cs
+   │   │
+   │   ├── 📁 Hubs/                                     # Hubs
+   │   │   └── NotificationHub.cs
+   │   │
+   │   ├── 📁 Models/                                   # Entity Models
+   │   │   ├── ApplicationUser.cs
+   │   │   ├── Appointment.cs
+   │   │   ├── Bill.cs
+   │   │   ├── Contact.cs
+   │   │   ├── Department.cs
+   │   │   ├── HospitalInfo.cs
+   │   │   ├── Insurance.cs
+   │   │   ├── Lab.cs
+   │   │   ├── Medicine.cs
+   │   │   ├── MedicineReport.cs
+   │   │   ├── Notification.cs
+   │   │   ├── PatientReport.cs
+   │   │   ├── Payroll.cs
+   │   │   ├── PrescribedMedicine.cs
+   │   │   ├── Room.cs
+   │   │   ├── Supplier.cs
+   │   │   ├── TestPrice.cs
+   │   │   └── Timing.cs
+   │   │
+   │   ├── 📁 Repositories/                             # Repository Interfaces
+   │   │   ├── IGenericRepository.cs
+   │   │   └── IUnitOfWork.cs
+   │   │
+   │   ├── 📁 Services/                                 # Service Interfaces
+   │   │   ├── IApplicationUserService.cs
+   │   │   ├── IAppointmentService.cs
+   │   │   ├── IContactService.cs
+   │   │   ├── IDoctorService.cs
+   │   │   ├── IHospitalInfoService.cs
+   │   │   ├── INotificationService.cs
+   │   │   ├── IRoomService.cs
+   │   │   └── ITimingService.cs
+   │   │
+   │   ├── 📁 Settings/                                 # Settings
+   │   │   └── FileSettings.cs
+   │   │
+   │   ├── 📁 ViewModels/                               # View Models
+   │   │   ├── ApplicationUserViewModel.cs
+   │   │   ├── BookAppointmentViewModel.cs
+   │   │   ├── ContactViewModel.cs
+   │   │   ├── DoctorViewModel.cs
+   │   │   ├── HospitalInfoViewModel.cs
+   │   │   ├── NotificationsViewModel.cs
+   │   │   ├── RoomViewModel.cs
+   │   │   ├── SlotViewModel.cs
+   │   │   └── TimingViewModel.cs
+   │   │
+   │   └── 📄 Hospital.Core.csproj
+   │
+   ├── 📁 Hospital.EF/                                  # Data Access Layer
+   │   │
+   │   ├── 📁 Helpers/                                  # Helper Classes
+   │   │   ├── DbInitializer.cs
+   │   │   └── NameIdentifierUserIdProvider.cs
+   │   │
+   │   ├── 📁 Migrations/                               # EF Core Migrations
+   │   │
+   │   ├── 📁 Repositories/                             # Repository Implementations
+   │   │   ├── GenericRepository.cs
+   │   │   └── UnitOfWork.cs
+   │   │
+   │   ├── 📁 Services/                                 # Service Implementations
+   │   │   ├── ApplicationUserService.cs
+   │   │   ├── AppointmentService.cs
+   │   │   ├── ContactService.cs
+   │   │   ├── DoctorService.cs
+   │   │   ├── HospitalInfoService.cs
+   │   │   ├── NotificationService.cs
+   │   │   ├── RoomService.cs
+   │   │   └── TimingService.cs
+   |   │
+   │   ├── ApplicationDbContext.cs
+   │   └── Hospital.EF.csproj
+   │
+   ├── 📁 Hospital.Web/                                # Web API Layer
+   │   │
+   │   ├── 📁 Areas/
+   │   │   ├── 📁 Admin/
+   │   │   │   ├── 📁 Controllers/                     # API Controllers
+   │   │   │   │   ├── ApplicationUsersController.cs
+   │   │   │   │   ├── AppointmentsController.cs
+   │   │   │   │   ├── ContactsController.cs
+   │   │   │   │   ├── DoctorsController.cs
+   │   │   │   │   ├── HomeController.cs
+   │   │   │   │   ├── HospitalsController.cs
+   │   │   │   │   ├── NotificationsController.cs
+   │   │   │   │   ├── RoomsController.cs
+   │   │   │   │   └── TimingsController.cs
+   │   │   │   │
+   │   │   │   ├── 📁 Views/                           # Views
+   │   │   │   │   ├── 📁 ApplicationUsers/
+   │   │   │   │   ├── 📁 Appointments/
+   │   │   │   │   ├── 📁 Contacts/
+   │   │   │   │   ├── 📁 Doctors/
+   │   │   │   │   ├── 📁 Home/
+   │   │   │   │   ├── 📁 Hospitals/
+   │   │   │   │   ├── 📁 Notifications/
+   │   │   │   │   ├── 📁 Rooms/
+   │   │   │   │   └── 📁 Timings/
+   │   │   │
+   │   │   ├── 📁 Identity/Pages/
+   │   │   │
+   │   │   ├── _ViewImports.cshtml
+   │   │   └── _ViewStart.cshtml
+   │   │
+   │   ├── 📁 Properties/
+   │   │   └️ launchSettings.json
+   │   │
+   │   ├── 📁 wwwroot/
+   │   │
+   │   ├── Hospital.Web.csproj
+   │   ├── Program.cs
+   │   ├── appsettings.Development.json
+   │   ├── appsettings.json
+   │   └── libman.json
+```
 ---
 
 ## 🔧 Installation & Setup
